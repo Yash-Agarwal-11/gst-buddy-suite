@@ -31,7 +31,7 @@ const example = {
   inputGST: 18,
   outputGST: 22.5,
   gstPayable: 4.5,
-  profit: 20.5,
+  profit: 25,
 };
 
 export const GSTFormulaCard = () => {
@@ -82,19 +82,19 @@ export const GSTFormulaCard = () => {
                 <div className="h-px bg-border my-3" />
                 <div className="flex justify-between text-primary">
                   <span className="font-medium">Input GST:</span>
-                  <span className="font-semibold">₹{example.inputGST}</span>
+                  <span className="font-semibold">₹{example.purchase} × {example.gst}% = ₹{example.inputGST}</span>
                 </div>
                 <div className="flex justify-between text-primary">
                   <span className="font-medium">Output GST:</span>
-                  <span className="font-semibold">₹{example.outputGST}</span>
+                  <span className="font-semibold">₹{example.selling} × {example.gst}% = ₹{example.outputGST}</span>
                 </div>
                 <div className="flex justify-between text-accent">
                   <span className="font-medium">GST Payable:</span>
-                  <span className="font-semibold">₹{example.gstPayable}</span>
+                  <span className="font-semibold">₹{example.outputGST} - ₹{example.inputGST} = ₹{example.gstPayable}</span>
                 </div>
                 <div className="flex justify-between text-success">
                   <span className="font-medium">Profit:</span>
-                  <span className="font-semibold">₹{example.profit}</span>
+                  <span className="font-semibold">₹{example.selling} - ₹{example.purchase} = ₹{example.profit}</span>
                 </div>
               </div>
             </div>

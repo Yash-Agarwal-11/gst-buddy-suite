@@ -43,7 +43,7 @@ export const GSTFormulaCard = () => {
     >
       <Card className="shadow-lg border-border/50">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-foreground">GST Calculation Guide</CardTitle>
+          <CardTitle className="text-2xl font-bold text-foreground">Radhey GST Calculation Guide</CardTitle>
           <CardDescription>Understanding GST formulas and calculations</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

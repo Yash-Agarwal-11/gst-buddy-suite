@@ -27,8 +27,8 @@ export function calculateGST(
   const outputGST = sellingPrice * (gstPercent / 100);
   const gstPayable = outputGST - inputGST;
   
-  // Calculate profit (selling - purchase - GST payable)
-  const profit = (sellingPrice - purchasePrice) - gstPayable;
+  // Calculate profit (selling - purchase)
+  const profit = sellingPrice - purchasePrice;
   
   // Calculate totals
   const totalPurchase = purchasePrice + inputGST;

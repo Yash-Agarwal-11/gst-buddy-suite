@@ -18,7 +18,7 @@ const Index = () => {
               <Calculator className="h-8 w-8 text-primary-foreground" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              GST Calculator Suite
+              Radhey GST Calculator
             </h1>
           </div>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">

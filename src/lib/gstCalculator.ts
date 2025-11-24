@@ -17,6 +17,14 @@ export interface GSTCalculation {
   totalSelling: number;
 }
 
+export interface RetailCalculation {
+  purchasePrice: number;
+  profitMargin: number;
+  baseSellingPrice: number;
+  gstAmount: number;
+  finalRetailPrice: number;
+}
+
 export function calculateGST(
   purchasePrice: number,
   sellingPrice: number,
@@ -41,6 +49,29 @@ export function calculateGST(
     profit: Number(profit.toFixed(2)),
     totalPurchase: Number(totalPurchase.toFixed(2)),
     totalSelling: Number(totalSelling.toFixed(2)),
+  };
+}
+
+export function calculateRetail(
+  purchasePrice: number,
+  profitMarginPercent: number,
+  gstPercent: number
+): RetailCalculation {
+  // Calculate base selling price with profit margin
+  const baseSellingPrice = purchasePrice + (purchasePrice * (profitMarginPercent / 100));
+  
+  // Calculate GST on base selling price
+  const gstAmount = baseSellingPrice * (gstPercent / 100);
+  
+  // Calculate final retail price (MRP)
+  const finalRetailPrice = baseSellingPrice + gstAmount;
+
+  return {
+    purchasePrice: Number(purchasePrice.toFixed(2)),
+    profitMargin: Number(profitMarginPercent.toFixed(2)),
+    baseSellingPrice: Number(baseSellingPrice.toFixed(2)),
+    gstAmount: Number(gstAmount.toFixed(2)),
+    finalRetailPrice: Number(finalRetailPrice.toFixed(2)),
   };
 }
 

@@ -14,24 +14,26 @@ export const GSTCalculatorCard = () => {
   const [sellingPrice, setSellingPrice] = useState<string>("125");
   const [profitMargin, setProfitMargin] = useState<string>("25");
   const [gstPercent, setGstPercent] = useState<string>("18");
+  const [transport, setTransport] = useState<string>("");
   const [result, setResult] = useState<GSTCalculation | null>(null);
   const [retailResult, setRetailResult] = useState<RetailCalculation | null>(null);
 
   const handleCalculate = () => {
     const purchase = parseFloat(purchasePrice) || 0;
     const gst = parseFloat(gstPercent) || 0;
+    const transportCost = parseFloat(transport) || 0;
 
     if (mode === "registered") {
       const selling = parseFloat(sellingPrice) || 0;
       if (purchase >= 0 && selling >= 0 && gst >= 0) {
-        const calculation = calculateGST(purchase, selling, gst);
+        const calculation = calculateGST(purchase, selling, gst, transportCost);
         setResult(calculation);
         setRetailResult(null);
       }
     } else {
       const margin = parseFloat(profitMargin) || 0;
       if (purchase >= 0 && margin >= 0 && gst >= 0) {
-        const calculation = calculateRetail(purchase, margin, gst);
+        const calculation = calculateRetail(purchase, margin, gst, transportCost);
         setRetailResult(calculation);
         setResult(null);
       }
@@ -43,6 +45,7 @@ export const GSTCalculatorCard = () => {
     setSellingPrice("");
     setProfitMargin("");
     setGstPercent("");
+    setTransport("");
     setResult(null);
     setRetailResult(null);
   };
@@ -89,89 +92,119 @@ export const GSTCalculatorCard = () => {
           </div>
 
           {mode === "registered" ? (
-            <div className="grid gap-4 sm:grid-cols-3">
+            <>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="purchase" className="text-foreground font-medium">
+                    Purchase Price (₹)
+                  </Label>
+                  <Input
+                    id="purchase"
+                    type="number"
+                    placeholder="100"
+                    value={purchasePrice}
+                    onChange={(e) => setPurchasePrice(e.target.value)}
+                    className="border-border/50 focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="selling" className="text-foreground font-medium">
+                    Selling Price (₹)
+                  </Label>
+                  <Input
+                    id="selling"
+                    type="number"
+                    placeholder="125"
+                    value={sellingPrice}
+                    onChange={(e) => setSellingPrice(e.target.value)}
+                    className="border-border/50 focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="gst" className="text-foreground font-medium">
+                    GST Rate (%)
+                  </Label>
+                  <Input
+                    id="gst"
+                    type="number"
+                    placeholder="18"
+                    value={gstPercent}
+                    onChange={(e) => setGstPercent(e.target.value)}
+                    className="border-border/50 focus:border-primary"
+                  />
+                </div>
+              </div>
               <div className="space-y-2">
-                <Label htmlFor="purchase" className="text-foreground font-medium">
-                  Purchase Price (₹)
+                <Label htmlFor="transport" className="text-foreground font-medium">
+                  Transport Cost (₹) - Optional
                 </Label>
                 <Input
-                  id="purchase"
+                  id="transport"
                   type="number"
-                  placeholder="100"
-                  value={purchasePrice}
-                  onChange={(e) => setPurchasePrice(e.target.value)}
+                  placeholder="0"
+                  value={transport}
+                  onChange={(e) => setTransport(e.target.value)}
                   className="border-border/50 focus:border-primary"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="selling" className="text-foreground font-medium">
-                  Selling Price (₹)
-                </Label>
-                <Input
-                  id="selling"
-                  type="number"
-                  placeholder="125"
-                  value={sellingPrice}
-                  onChange={(e) => setSellingPrice(e.target.value)}
-                  className="border-border/50 focus:border-primary"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="gst" className="text-foreground font-medium">
-                  GST Rate (%)
-                </Label>
-                <Input
-                  id="gst"
-                  type="number"
-                  placeholder="18"
-                  value={gstPercent}
-                  onChange={(e) => setGstPercent(e.target.value)}
-                  className="border-border/50 focus:border-primary"
-                />
-              </div>
-            </div>
+            </>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-3">
+            <>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="purchase-retail" className="text-foreground font-medium">
+                    Purchase Price (₹)
+                  </Label>
+                  <Input
+                    id="purchase-retail"
+                    type="number"
+                    placeholder="100"
+                    value={purchasePrice}
+                    onChange={(e) => setPurchasePrice(e.target.value)}
+                    className="border-border/50 focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="profit-margin" className="text-foreground font-medium">
+                    Profit Margin (%)
+                  </Label>
+                  <Input
+                    id="profit-margin"
+                    type="number"
+                    placeholder="25"
+                    value={profitMargin}
+                    onChange={(e) => setProfitMargin(e.target.value)}
+                    className="border-border/50 focus:border-primary"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="gst-retail" className="text-foreground font-medium">
+                    GST Rate (%)
+                  </Label>
+                  <Input
+                    id="gst-retail"
+                    type="number"
+                    placeholder="18"
+                    value={gstPercent}
+                    onChange={(e) => setGstPercent(e.target.value)}
+                    className="border-border/50 focus:border-primary"
+                  />
+                </div>
+              </div>
               <div className="space-y-2">
-                <Label htmlFor="purchase-retail" className="text-foreground font-medium">
-                  Purchase Price (₹)
+                <Label htmlFor="transport-retail" className="text-foreground font-medium">
+                  Transport Cost (₹) - Optional
                 </Label>
                 <Input
-                  id="purchase-retail"
+                  id="transport-retail"
                   type="number"
-                  placeholder="100"
-                  value={purchasePrice}
-                  onChange={(e) => setPurchasePrice(e.target.value)}
+                  placeholder="0"
+                  value={transport}
+                  onChange={(e) => setTransport(e.target.value)}
                   className="border-border/50 focus:border-primary"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="profit-margin" className="text-foreground font-medium">
-                  Profit Margin (%)
-                </Label>
-                <Input
-                  id="profit-margin"
-                  type="number"
-                  placeholder="25"
-                  value={profitMargin}
-                  onChange={(e) => setProfitMargin(e.target.value)}
-                  className="border-border/50 focus:border-primary"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="gst-retail" className="text-foreground font-medium">
-                  GST Rate (%)
-                </Label>
-                <Input
-                  id="gst-retail"
-                  type="number"
-                  placeholder="18"
-                  value={gstPercent}
-                  onChange={(e) => setGstPercent(e.target.value)}
-                  className="border-border/50 focus:border-primary"
-                />
-              </div>
-            </div>
+            </>
           )}
 
           <div className="flex gap-3">

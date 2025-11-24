@@ -28,18 +28,22 @@ export interface RetailCalculation {
 export function calculateGST(
   purchasePrice: number,
   sellingPrice: number,
-  gstPercent: number
+  gstPercent: number,
+  transport: number = 0
 ): GSTCalculation {
+  // Add transport to purchase price
+  const adjustedPurchasePrice = purchasePrice + transport;
+  
   // Calculate GST amounts
-  const inputGST = purchasePrice * (gstPercent / 100);
+  const inputGST = adjustedPurchasePrice * (gstPercent / 100);
   const outputGST = sellingPrice * (gstPercent / 100);
   const gstPayable = outputGST - inputGST;
   
-  // Calculate profit (selling - purchase)
-  const profit = sellingPrice - purchasePrice;
+  // Calculate profit (selling - adjusted purchase)
+  const profit = sellingPrice - adjustedPurchasePrice;
   
   // Calculate totals
-  const totalPurchase = purchasePrice + inputGST;
+  const totalPurchase = adjustedPurchasePrice + inputGST;
   const totalSelling = sellingPrice + outputGST;
 
   return {
@@ -55,10 +59,14 @@ export function calculateGST(
 export function calculateRetail(
   purchasePrice: number,
   profitMarginPercent: number,
-  gstPercent: number
+  gstPercent: number,
+  transport: number = 0
 ): RetailCalculation {
+  // Add transport to purchase price
+  const adjustedPurchasePrice = purchasePrice + transport;
+  
   // Calculate base selling price with profit margin
-  const baseSellingPrice = purchasePrice + (purchasePrice * (profitMarginPercent / 100));
+  const baseSellingPrice = adjustedPurchasePrice + (adjustedPurchasePrice * (profitMarginPercent / 100));
   
   // Calculate GST on base selling price
   const gstAmount = baseSellingPrice * (gstPercent / 100);
